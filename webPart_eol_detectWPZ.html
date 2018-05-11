@@ -30,9 +30,12 @@
                         try{console.log(siblingWebPart);}catch(err){}
                     }, function(){
                         try{console.log("wpzDetector instance "+ thisMoment.valueOf() +" finished looping through my WPZ's web parts");}catch(err){}
-                        if ( typeof(convertDetectedWebPartsToTabs) !== "undefined" ){
-                            setTimeout(convertDetectedWebPartsToTabs,500);
-                        }
+                        setTimeout(function(){
+                            if ( typeof(convertDetectedWebPartsToTabs) !== "undefined" ){
+                                convertDetectedWebPartsToTabs();
+                            }
+                        },500);
+                        
                     });
                 }
                 clearInterval(myInt);
