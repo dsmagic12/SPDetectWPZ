@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    var detectWPZDict = detectWPZDict || [];
+    var fxAppendDetectWPZScript = fxAppendDetectWPZScript || function(){
+        var appendScriptTag = document.createElement("SCRIPT");
+        appendScriptTag.src = _spPageContextInfo.siteAbsoluteUrl +"/Style%20Library/detectWPZ-vanilla.js";
+        var thisMoment = new Date();
+        appendScriptTag.setAttribute("instanceMoment", thisMoment.valueOf());
+        document.writeln(appendScriptTag.outerHTML);
+        var bFirstInt = true;
+        var myInt = setInterval(function(){
+            
+            if ( bFirstInt === true ){
+                if ( !document.querySelector("[script*='/Style%20Library/detectWPZ-tabs.js']") ){
+                    var appendScriptTag = document.createElement("SCRIPT");
+                    appendScriptTag.src = _spPageContextInfo.siteAbsoluteUrl +"/Style%20Library/detectWPZ-tabs.js";
+                    document.head.appendChild(appendScriptTag);
+                }
+            }
+            
+            if ( typeof(detectWPZ) !== "undefined" ){
+                var dictIndex = detectWPZDict.push(new wpzDetector(thisMoment.valueOf()));
+                dictIndex--;
+                detectWPZDict[dictIndex].scriptTag = document.querySelector("SCRIPT[src*='detectWPZ'][instanceMoment='"+detectWPZDict[dictIndex].instanceName+"']");
+                detectWPZDict[dictIndex].guid = detectWPZDict[dictIndex].scriptTag.parentElement.parentElement.getAttribute("webpartid");
+                detectWPZDict[dictIndex].myWebPart = detectWPZDict[dictIndex].scriptTag.parentElement.parentElement.parentElement.parentElement;
+                //detectWPZDict[dictIndex].wpz = detectWPZDict[dictIndex].scriptTag.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+                detectWPZDict[dictIndex].wpz = detectWPZ.parentsUntilMatchingSelector(detectWPZDict[dictIndex].myWebPart,"TD[name='_invisibleIfEmpty'], DIV.ms-rte-layoutszone-inner", 50);
+                if ( detectWPZ.isPageInEditMode() === false ) {
+                    detectWPZ.getZoneWebParts(detectWPZDict[dictIndex], function(siblingWebPart){
+                        try{console.log("wpzDetector instance "+ thisMoment.valueOf());}catch(err){}
+                        try{console.log(siblingWebPart);}catch(err){}
+                    }, function(){
+                        try{console.log("wpzDetector instance "+ thisMoment.valueOf() +" finished looping through my WPZ's web parts");}catch(err){}
+                        setTimeout(function(){
+                            if ( typeof(convertDetectedWebPartsToTabs) !== "undefined" ){
+                                convertDetectedWebPartsToTabs();
+                            }
+                        },500);
+                        
+                    });
+                }
+                clearInterval(myInt);
+            }
+            bFirstInt = false;
+        },756);
+        
+    };
+    fxAppendDetectWPZScript();
+</script>

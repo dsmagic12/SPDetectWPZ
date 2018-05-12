@@ -67,7 +67,7 @@ var detectWPZ = detectWPZ || {
             try{wp.body = document.getElementById("WebPartWPQ"+wp.num).innerHTML;}catch(err){}
             try{wp.guid = document.getElementById("WebPartWPQ"+wp.num).attributes["webpartid"].value;}catch(err){}
             /*if ( wp.guid !== detectWPZ.guid && !wp.title === false ) {*/
-            if ( wp.guid !== detectWPZ.guid ) {
+            if ( wp.guid !== wpzDetector.guid ) {
                 wpzDetector.arrWPs.push(wp);
                 if ( typeof(fxEach) === "function" ) {
                     fxEach(wp);
