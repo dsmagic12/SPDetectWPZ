@@ -1,8 +1,8 @@
+/**/
+/*http://expertsoverlunch.com/sandbox/SitePages/complex%20wiki%20page%20layout.aspx*/
+/*http://expertsoverlunch.com/sandbox/SitePages/complex%20web%20parts%20page%20layout.aspx*/
 var detectWPZ = detectWPZ || {
     instances: [],
-    wpz: null,
-    arrWPs: [],
-    arrRows: [],
     pageInEditMode:false,
     isPageInEditMode: function() {
         /*https://sharepoint.stackexchange.com/questions/149096/a-way-to-identify-when-page-is-in-edit-mode-for-javascript-purposes*/
@@ -31,32 +31,31 @@ var detectWPZ = detectWPZ || {
         if ( typeof(iBreakAt) === "undefined" ){ var iBreakAt = 100; }
         var iBreak = 0;
         var parent = element.parentElement;
-        while ( parent.querySelectorAll(selector).length < 1 && iBreak < iBreakAt ) {
+        while ( parent.matches(selector) === false && iBreak < iBreakAt ) {
             parent = parent.parentElement;
             iBreak++;
         }
-        if ( parent.querySelectorAll(selector).length > 0 === true ){
-            return parent.querySelectorAll(selector)[0];
+        if ( parent.matches(selector) === true ){
+            try{console.log(parent);}catch(err){}
+            return parent;
         }
         else {
             return false;
         }
     },
-    scriptTag: document.querySelector("SCRIPT[src*='detectWPZ']"),
-    guid: "",
-    getGuid: function(){
-        var ancestor = detectWPZ.parentsUntilHasAttribute(detectWPZ.scriptTag, "webpartid", 20);
+    getGuid: function(wpzDetector){
+        var ancestor = detectWPZ.parentsUntilHasAttribute(wpzDetector.scriptTag, "webpartid", 20);
         if ( ancestor.hasAttribute("webpartid") === true ){
-            detectWPZ.guid = ancestor.attributes["webpartid"].value;
-            return ancestor.attributes["webpartid"].value;
+            wpzDetector.guid = ancestor.getAttribute("webpartid");
+            return ancestor.getAttribute("webpartid");
         }
         else {
-            detectWPZ.guid = "";
+            wpzDetector.guid = "";
             return "";
         }
     },
     getZoneWebParts: function(wpzDetector, fxEach, afterFx){
-        var collWPs = wpzDetector.wpz.querySelectorAll("DIV.ms-webpartzone-cell[id^='MSOZoneCell_WebPartWPQ']");
+        var collWPs = wpzDetector.wpz.querySelectorAll("[id^='MSOZoneCell_WebPartWPQ']");
         for ( var webPart = 0; webPart < collWPs.length; webPart++ ){
             var wp = {
                 id: collWPs[webPart].id,
@@ -65,7 +64,7 @@ var detectWPZ = detectWPZ || {
             try{wp.num = collWPs[webPart].id.replace("MSOZoneCell_WebPartWPQ","");}catch(err){}
             try{wp.title = document.getElementById("WebPartTitleWPQ"+wp.num).innerHTML;}catch(err){}
             try{wp.body = document.getElementById("WebPartWPQ"+wp.num).innerHTML;}catch(err){}
-            try{wp.guid = document.getElementById("WebPartWPQ"+wp.num).attributes["webpartid"].value;}catch(err){}
+            try{wp.guid = document.getElementById("WebPartWPQ"+wp.num).getAttribute("webpartid");}catch(err){}
             /*if ( wp.guid !== detectWPZ.guid && !wp.title === false ) {*/
             if ( wp.guid !== wpzDetector.guid ) {
                 wpzDetector.arrWPs.push(wp);
@@ -78,10 +77,10 @@ var detectWPZ = detectWPZ || {
             afterFx();
         }
     },
-    getMyWPZ: function(afterFx){
-        detectWPZ.wpz = detectWPZ.parentsUntilMatchingSelector(detectWPZ.scriptTag, "TD[name='_invisibleIfEmpty'], DIV.ms-rte-layoutszone-inner", 50);
+    getMyWPZ: function(wpzDetector, afterFx){
+        wpzDetector.wpz = detectWPZ.parentsUntilMatchingSelector(wpzDetector.scriptTag, "TD[name='_invisibleIfEmpty'], DIV.ms-rte-layoutszone-inner", 50);
         if ( typeof(afterFx) === "function" ) {
-            afterFx(detectWPZ.wpz);
+            afterFx(wpzDetector.wpz);
         }
     },
     otherWPsInZone: {
@@ -92,17 +91,6 @@ var detectWPZ = detectWPZ || {
             try{console.log("Finished looping through my WPZ's web parts");}catch(err){}
         }
     }
-    /*
-    ,
-    onLoad: setTimeout(function(){
-        try{console.log("detectWPZ initialized... running code to detect other webparts in same zone");}catch(err){}
-        if ( detectWPZ.isPageInEditMode() === false ) {
-            detectWPZ.getMyWPZ(function(elmWPZ){
-                detectWPZ.getZoneWebParts(detectWPZ, detectWPZ.otherWPsInZone.forEach, detectWPZ.otherWPsInZone.afterFx);
-            });
-        }
-    },13)
-    */
 };
 var wpzDetector = wpzDetector || function(instanceName) {
     return {
