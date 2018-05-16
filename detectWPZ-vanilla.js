@@ -106,6 +106,7 @@ var wpzDetector = wpzDetector || function(instanceName) {
         arrRows: [],
         scriptTag: null,
         guid: "",
-        myWebPart: null
+        myWebPart: null,
+        fixedWidth: 0
     }
 };

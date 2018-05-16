@@ -39,6 +39,13 @@
                         
                     });
                 }
+                var collWPs = detectWPZDict[dictIndex].wpz.querySelectorAll("[id^='MSOZoneCell_WebPartWPQ']");
+                for ( var iSibling = 0; iSibling < collWPs.length; iSibling++ ){
+                    var siblingWebPart = collWPs[iSibling];
+                    if ( siblingWebPart.scrollWidth > detectWPZDict[dictIndex].fixedWidth ) {
+                        detectWPZDict[dictIndex].fixedWidth = siblingWebPart.scrollWidth;
+                    }
+                }
                 clearInterval(myInt);
             }
             bFirstInt = false;

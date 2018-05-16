@@ -8,6 +8,7 @@ function convertDetectedWebPartsToTabs(){
             tabRow.setAttribute("instanceElement",instanceElement);
             tabRow.setAttribute("instanceName",detectWPZDict[instanceElement].instanceName);
             tabRow.style.display = "block";
+            tabRow.style.width = detectWPZDict[instanceElement].fixedWidth +"px";
             tabRow.className = "tabWrapper";
             //https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
             detectWPZDict[instanceElement].wpz.firstElementChild.insertAdjacentElement('beforebegin', tabRow);
