@@ -15,6 +15,8 @@ function convertDetectedWebPartsToTabs(){
             var bFirstTitle = false;
             for ( var detectorWP = 0; detectorWP < detectWPZDict[instanceElement].arrWPs.length; detectorWP++ ) {
                 var siblingWebPart = detectWPZDict[instanceElement].arrWPs[detectorWP];
+                document.querySelector("#"+ siblingWebPart.id).style.margin = "0px auto 0px";
+                try{document.querySelector("#"+ siblingWebPart.id +" .ms-PartSpacingVertical").style.display = "none";}catch(err){}
                 if ( siblingWebPart.hasOwnProperty("title") === true ) {
                     var tab = document.createElement("LI");
                     tab.style.display = "inline-block";
