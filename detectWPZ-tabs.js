@@ -18,11 +18,23 @@ function convertDetectedWebPartsToTabs(){
                 if ( siblingWebPart.hasOwnProperty("title") === true ) {
                     var tab = document.createElement("LI");
                     tab.style.display = "inline-block";
-                    tab.style.backgroundColor = "#e6e6e6";
+                    try{
+                        tab.style.backgroundColor = detectWPZ.theme.colors.ButtonBackground;
+                    }
+                    catch(err){
+                        tab.style.backgroundColor = "#e6e6e6";
+                    }
                     tab.style.padding = "20px 10px";
                     tab.style.margin = "5px 10px 0px 0px";
                     tab.style.cursor = "pointer";
-                    tab.style.border = "1px solid black";
+                    try{
+                        tab.style.border = "1px solid "+detectWPZ.theme.colors.ButtonBorder;
+                    }catch(err){
+                        tab.style.border = "1px solid black";
+                    }
+                    try{
+                        tab.style.color = detectWPZ.theme.colors.ButtonText;
+                    }catch(err){}
                     tab.className = "tab";
                     tab.setAttribute("instanceElement",instanceElement);
                     tab.setAttribute("instanceName",detectWPZDict[instanceElement].instanceName);
